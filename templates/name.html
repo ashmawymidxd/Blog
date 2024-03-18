@@ -3,18 +3,19 @@
 {% block content %}
 <div class="container my-3 card pb-3">
 
-    <h1>enter your name</h1>
     {% if name %}
-    {% for message in get_flashed_messages() %}
+    {% if get_flashed_messages %}
+    <!-- {% for message in get_flashed_messages() %} -->
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>Holy {{name}} ! {{email}}</strong> {{ message}}
         <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-mdb-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    {% endfor %}
+    <!-- {% endfor %} -->
+    {% endif %}
     {% else %}
-    <h1>what's your name</h1>
+    <!-- <h1>what's your name</h1> -->
     {% endif %}
 
     <form method="post">
@@ -23,8 +24,12 @@
         {{form.name(class="form-control")}}
         {{form.email.label(class="form-label")}}
         {{form.email(class="form-control")}}
+        {{form.password_hash.label(class="form-label")}}
+        {{form.password_hash(class="form-control")}}
+        {{form.password_hash2.label(class="form-label")}}
+        {{form.password_hash2(class="form-control")}}
         <br>
-        {{form.submit(class="btn btn-dark w-100")}}
+        {{form.submit(class="btn btn-dark")}}
     </form>
 
     <h1>{{ session['email'] }}</h1>
@@ -32,7 +37,8 @@
     <h1>Users</h1>
     <ul>
         {% for user in users %}
-        <li><a href="{{url_for('update',id = user.id)}}">{{ user.name }}</a> - {{ user.email }}</li>
+        <li><a href="{{url_for('update',id = user.id)}}">{{ user.name }}</a> - {{ user.email }} - <a
+                href="{{url_for('delete',id=user.id)}}" class="text-warning"> delete ?</a></li>
         {% endfor %}
     </ul>
 </div>
