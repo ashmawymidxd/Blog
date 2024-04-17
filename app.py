@@ -68,9 +68,11 @@ class Posts(db.Model):
     def __repr__(self) -> str:
         return '<Title %r>'% self.title
     
-    def __init__(self,title,content):
+    def __init__(self,title,content,auther,slug):
         self.title = title
         self.content = content
+        self.author = auther
+        self.slug = slug
 
 # Create the database tables
 with app.app_context():
@@ -88,7 +90,7 @@ class UserForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField("Title",validators=[DataRequired()])
     content = StringField("Content",validators=[DataRequired()],widget=TextArea())
-    author = StringField("thwe author",validators=[DataRequired()])
+    author = StringField("Author",validators=[DataRequired()])
     slug = StringField("Slug",validators=[DataRequired()])
     submit = SubmitField("Submit")
 
@@ -108,8 +110,8 @@ def json():
     }
 
 # create a post route
-@app.route('/post',methods=['GET','POST'])
-def post():
+@app.route('/add-post',methods=['GET','POST'])
+def add_post():
     form = PostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -124,7 +126,18 @@ def post():
         form.author.data = ''
         form.slug.data = ''
         flash('The Post Added Successfily.')
-    return(render_template('post.html',form=form))
+    return(render_template('add_post.html',form=form))
+
+@app.route('/posts',methods=['GET','POST'])
+def posts():
+    posts = Posts.query.all()
+    return(render_template('posts.html',posts=posts))
+
+
+@app.route('/post/<int:id>',methods=['GET','POST'])
+def post(id):
+    post = Posts.query.get_or_404(id)
+    return(render_template('post.html',post=post))
 
 @app.route('/name',methods=['GET','POST'])
 def user():

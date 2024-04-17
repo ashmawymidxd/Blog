@@ -1,3 +1,3 @@
 pip install flask-wtf   
 https://flask-wtf.readthedocs.io/en/1.2.x/
-last video 17
+last video 19
