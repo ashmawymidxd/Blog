@@ -25,6 +25,8 @@ db = SQLAlchemy(app)
 # make user migration
 migrate = Migrate(app,db)
 
+# ---------------------------------- models ----------------------------- #
+
 # create a model user
 class Users(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -78,6 +80,9 @@ class Posts(db.Model):
 with app.app_context():
     db.create_all()
 
+
+# ---------------------------------- forms ----------------------------- #
+
 # create form class user
 class UserForm(FlaskForm):
     name = StringField("What's Your Name ",validators=[DataRequired()])
@@ -95,6 +100,7 @@ class PostForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+# ---------------------------------- routs ----------------------------- #
 @app.route('/')
 def index():
     return(render_template('index.html'))
@@ -128,17 +134,19 @@ def add_post():
         flash('The Post Added Successfily.')
     return(render_template('add_post.html',form=form))
 
+# get all posts
 @app.route('/posts',methods=['GET','POST'])
 def posts():
     posts = Posts.query.all()
     return(render_template('posts.html',posts=posts))
 
-
+# show post
 @app.route('/post/<int:id>',methods=['GET','POST'])
 def post(id):
     post = Posts.query.get_or_404(id)
     return(render_template('post.html',post=post))
 
+# create user
 @app.route('/name',methods=['GET','POST'])
 def user():
     name = None
@@ -161,30 +169,6 @@ def user():
     users = Users.query.all()
     flash('The Name Added Successfily.')
     return(render_template('name.html',form=form,name=name,email=email,users=users))
-
-# @app.route('/name', methods=['GET', 'POST'])
-# def user():
-#     name = None
-#     email = None
-#     password_hash = None  # Remove this line, password is hashed later
-#     form = UserForm()
-#     if form.validate_on_submit():
-#         user = Users.query.filter_by(name=form.name.data).first()
-#         name = form.name.data
-#         email = form.email.data
-
-#         # Hash the password before creating the user object
-#         password_hash = generate_password_hash(form.password_hash.data)
-
-#         new_name = Users(name, email, password_hash)  # Use only 3 arguments here
-#         db.session.add(new_name)
-#         db.session.commit()
-#         form.name.data = ''
-#         form.email.data = ''
-#         form.password_hash.data = ''
-#         form.password_hash2.data = ''  # Clear confirmed password field as well
-#         flash('The Name Added Successfully.')
-#     return render_template('name.html', form=form, name=name, email=email, users=Users.query.all())
 
 # update user based on id
 @app.route('/update/<int:id>',methods=['GET','POST'])
