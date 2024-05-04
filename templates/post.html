@@ -3,12 +3,13 @@
 {% block content %}
 <div class="container my-3 pb-3">
    
-    <div class="card rounded-0 p-3 m-3">
+    <div class="card p-3 m-3">
         <h3>{{ post.title }}</h3>
         <p>{{ post.date_added }}</p>
         <p>{{ post.content }}</p>
+        <p>{{ post.slug }}</p>
         <p>{{ post.author }}</p>
+        <a class="btn btn-secondary" href="{{url_for('posts')}}">Back Blog</a>
     </div>
-    <a class="btn btn-secondary" href="{{url_for('posts')}}">Back Blog</a>
 </div>
 {% endblock %}

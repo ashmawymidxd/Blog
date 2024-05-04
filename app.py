@@ -146,6 +146,26 @@ def post(id):
     post = Posts.query.get_or_404(id)
     return(render_template('post.html',post=post))
 
+# update post
+@app.route('/updatePost/<int:id>',methods=['GET','POST'])
+def updatePost(id):
+    post = Posts.query.get_or_404(id)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.author = form.author.data
+        post.slug = form.slug.data
+        post.content = form.content.data
+        db.session.add(post)
+        db.session.commit()
+        flash('the post updated successfully')
+        return redirect(url_for('post',id=post.id))
+    form.title.data = post.title
+    form.content.data = post.content
+    form.author.data = post.author
+    form.slug.data = post.slug
+    return(render_template('updatePost.html',form=form))
+
 # create user
 @app.route('/name',methods=['GET','POST'])
 def user():

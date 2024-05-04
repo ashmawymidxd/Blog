@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-3 card pb-3">
+    <!-- add post form -->
+    {% if get_flashed_messages %}
+    <!-- {% for message in get_flashed_messages() %} -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Holy {{name}} ! {{email}}</strong> {{ message}}
+        <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-mdb-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- {% endfor %} -->
+    {% endif %}
+    <form method="post">
+        {{form.hidden_tag()}}
+        {{form.title.label(class="form-label")}}
+        {{form.title(class="form-control")}}
+        {{form.author.label(class="form-label")}}
+        {{form.author(class="form-control") }}
+        {{form.slug.label(class="form-label")}}
+        {{form.slug(class="form-control")}}
+        {{form.content.label(class="form-label")}}
+        {{form.content(class="form-control",row="10")}}
+        <br>
+        {{form.submit(class="btn btn-dark")}}
+    </form>
+</div>
+{% endblock %}
